@@ -1,0 +1,30 @@
+Product Specifications for Food Nutrition Comparison MVP
+
+This document outlines the data fields to be collected for each product (Drinks and Oil) from openfoodfacts.org. It will be updated as the project evolves. All fields are to be included in the MVP CSV output.
+
+| Field Name           | Data Type | Description                                                      | Example Value                |
+|----------------------|-----------|------------------------------------------------------------------|------------------------------|
+| id                   | Integer   | Unique product ID (auto-increment or generated)                  | 1                            |
+| product_name         | Text      | Name of the product                                              | Amul Taaza                   |
+| brand                | Text      | Brand name                                                       | Amul                         |
+| category             | Text      | Product category (oil, drink, etc.)                              | Drink                        |
+| ingredients          | Text      | Ingredients list (as text)                                       | Milk, Sugar, Cocoa           |
+| nutrition_json       | Text      | Nutrition values as JSON (all available fields)                  | {"energy_kcal": 60, ...}    |
+| serving_size         | Text      | Serving size (e.g., "100ml", "1 tbsp", etc.)                     | 200ml                        |
+| nutrition_per        | Text      | Basis for nutrition values ("per 100g", "per serving", etc.)      | per 100ml                    |
+| image_paths          | Text      | Comma-separated list of all image paths for the product          | images/drink/amul1.jpg       |
+| selected_image       | Text      | Path to the image marked as correct for nutrition extraction     | selected_images/amul1.jpg    |
+| nutrition_extracted  | Text      | Nutrition info extracted from image (if text missing)            | Energy: 60kcal, Fat: 3g      |
+| source               | Text      | Data source (openfoodfacts, etc.)                                | openfoodfacts                |
+| scraped_at           | Datetime  | When the data was collected                                      | 2024-06-01 12:00:00          |
+
+Notes:
+- nutrition_json will contain all available nutrition fields, e.g., energy, protein, fat, saturated fat, carbohydrates, sugar, fiber, sodium, vitamins, etc.
+- All raw scraped data will be backed up as JSON files in the raw_data/ folder.
+- This document will be updated as new requirements or fields are identified.
+
+Future Improvements
+-------------------
+1. Introduce LLMs to ensure completeness of scraped data - completeness score, get missing values, categorisation, duplicate products, standardisation of nutrients, intake based on serving size, etc.
+
+(Continue to add notes and ideas for future enhancements here.)
