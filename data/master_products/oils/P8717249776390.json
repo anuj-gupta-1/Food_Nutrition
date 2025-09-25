@@ -1,0 +1,46 @@
+{
+  "master_product_id": "P8717249776390",
+  "name": "Training Treats - Chicken & beef",
+  "brand": "Mr goodlad",
+  "size": {
+    "value": 500.0,
+    "unit": "g"
+  },
+  "category": "Oils",
+  "subcategory": "",
+  "nutrition": {
+    "per_100g": {
+      "energy": {},
+      "macronutrients": {
+        "protein": {},
+        "carbohydrates": {
+          "total": {},
+          "sugars": {},
+          "fiber": {}
+        },
+        "fats": {
+          "total": {},
+          "saturated": {}
+        }
+      },
+      "minerals": {
+        "sodium": {}
+      }
+    }
+  },
+  "source_data": {
+    "primary_source": "openfoodfacts",
+    "sources": [
+      {
+        "id": "8717249776390",
+        "name": "openfoodfacts",
+        "fields_used": [
+          "nutrition",
+          "product_info"
+        ],
+        "url": "https://world.openfoodfacts.org/product/8717249776390/training-treats-chicken-beef-mr-goodlad"
+      }
+    ]
+  },
+  "last_updated": "2025-09-25T12:07:13.086210Z"
+}

@@ -24,13 +24,90 @@ OpenFoodFacts   scrape_*.py    raw_data/   standardize.py    data/        Native
 (and others)    (Python)       images/     (Python)      products.csv   (Kotlin)
 ```
 
-## 3. Data Pipeline (Completed ✅)
+## 3. Data Collection & Processing Journey
 
-The data pipeline is fully functional and automated.
+### 3.1 Data Sources Exploration
 
--   **Scraping**: `scripts/scrape_openfoodfacts.py` fetches product data and images from OpenFoodFacts for specified categories ("Carbonated Drinks", "Vegetable Oils"). Raw JSON and images are saved locally.
--   **Standardization**: `scripts/standardize_nutrition.py` processes the raw JSON, extracts key nutrients, standardizes them to per-100g/ml values, and saves the clean data.
--   **Output**: The final, clean dataset is stored in `data/products.csv`.
+#### OpenFoodFacts
+- Primary and most reliable source
+- Well-structured JSON data
+- Standardized nutrition information
+- Comprehensive product images
+- Implementation: `scripts/scrape_openfoodfacts.py`
+
+#### E-commerce Platforms
+
+**StarQuik**
+- Successfully implemented
+- Clean data structure
+- Limited product categories
+- Implementation: `Scraping/fmcg_scraper_selenium_StarQuik.py`
+
+**Frugivore**
+- Successfully implemented
+- Product data extracted using Selenium
+- Nutrition information available in structured format
+- Good coverage for organic products
+- Implementation: `Scraping/fmcg_scraper_selenium_frugivore.py`
+
+**JioMart**
+- Attempted but faced challenges
+- Strong anti-bot measures prevented automated scraping
+- Attempted approaches:
+  - Basic Selenium automation
+  - Headless browsing
+  - Anti-detection measures
+  - Browser fingerprint randomization
+- Current status: On hold due to technical limitations
+
+### 3.2 Data Collection Challenges
+
+1. **Anti-Bot Measures**
+   - Dynamic page loading
+   - CAPTCHAs
+   - IP-based rate limiting
+   - Browser fingerprinting detection
+   - JavaScript-based bot detection
+
+2. **Data Consistency**
+   - Different units (per 100g vs per serving)
+   - Varying nutrition label formats
+   - Inconsistent product categorization
+   - Multiple variations of same product
+
+3. **Image Processing**
+   - Attempted OCR on nutrition labels
+   - Challenges with image quality
+   - Varying label formats
+   - Multi-language content
+
+### 3.3 Data Processing Pipeline
+
+1. **Raw Data Collection**
+   - JSON data stored in `raw_data/`
+   - Images saved in `images/`
+   - Source-specific CSV files in `Scraping/`:
+     - `fmcg_products_frugivore.csv` (from Frugivore scraper)
+     - `fmcg_products_StarQuik.csv` (from StarQuik scraper)
+     - `fmcg_products_jiomart.csv` (from JioMart scraper)
+
+2. **Data Standardization** (`scripts/standardize_nutrition.py`)
+   - Unit conversion to per 100g/ml
+   - Nutrient value normalization
+   - Category standardization
+   - Brand name normalization
+   - Serving size standardization
+
+3. **Data Quality Checks**
+   - Validation of nutrient values
+   - Removal of duplicates
+   - Missing data handling
+   - Outlier detection
+
+4. **Output**
+   - Final, clean dataset stored in `data/products.csv`
+   - Standardized image references
+   - Validated nutrition information
 
 ### Data Schema
 
@@ -127,6 +204,14 @@ Food_Nutrition/
 ### Long Term (Advanced Features)
 -   **AI/ML**: Use AI for dynamic categorization, ingredient analysis, and health scoring.
 -   **User Features**: Implement search, filtering, barcode scanning, and user accounts.
+
+## 8. To Be Covered in Future Updates
+- User personas
+- Success metrics
+- Competitive analysis
+- Risk assessment
+- Privacy considerations
+- Compliance requirements (FSSAI, etc.)
 
 ## Data Distribution (Firebase Hosting)
 - The standardized dataset is published as `products.csv` on Firebase Hosting.

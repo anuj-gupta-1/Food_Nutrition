@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "food-nutririon"
-  }
+  },
+  "targets": {
+    "food-nutririon": {
+      "hosting": {
+        "production": [
+          "food-nutririon"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

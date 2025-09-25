@@ -1,0 +1,67 @@
+{
+  "master_product_id": "P9310175700102",
+  "name": "Primero extra virgin olive oil",
+  "brand": "Moro",
+  "size": {
+    "value": 1.0,
+    "unit": "l"
+  },
+  "category": "Oils",
+  "subcategory": "",
+  "nutrition": {
+    "per_100g": {
+      "energy": {
+        "kj": 3390
+      },
+      "macronutrients": {
+        "protein": {
+          "value": 0,
+          "unit": "g"
+        },
+        "carbohydrates": {
+          "total": {
+            "value": 0,
+            "unit": "g"
+          },
+          "sugars": {
+            "value": 0,
+            "unit": "g"
+          },
+          "fiber": {}
+        },
+        "fats": {
+          "total": {
+            "value": 91,
+            "unit": "g"
+          },
+          "saturated": {
+            "value": 13,
+            "unit": "g"
+          }
+        }
+      },
+      "minerals": {
+        "sodium": {
+          "value": 0,
+          "unit": "g"
+        }
+      }
+    },
+    "serving_size": "15 ml"
+  },
+  "source_data": {
+    "primary_source": "openfoodfacts",
+    "sources": [
+      {
+        "id": "9310175700102",
+        "name": "openfoodfacts",
+        "fields_used": [
+          "nutrition",
+          "product_info"
+        ],
+        "url": "https://world.openfoodfacts.org/product/9310175700102/primero-extra-virgin-olive-oil-moro"
+      }
+    ]
+  },
+  "last_updated": "2025-09-25T12:07:13.094729Z"
+}

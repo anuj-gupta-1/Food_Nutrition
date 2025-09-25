@@ -21,45 +21,75 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.runtime.ExperimentalComposeApi
-import androidx.compose.ui.ExperimentalComposeUiApi
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun ProductSelectionScreen(dao: ProductDao, category: String, onProductsSelected: (List<Product>) -> Unit) {
-    val products by dao.getProductsByCategory(category).collectAsState(initial = emptyList())
+fun ProductSelectionScreen(
+    dao: ProductDao, 
+    category: String, 
+    onProductsSelected: (List<Product>) -> Unit
+) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val products by dao.getProductsByCategory(category)
+        .collectAsState(initial = emptyList())
+    
     var selectedProducts by remember { mutableStateOf<List<Product>>(emptyList()) }
     var searchQuery by remember { mutableStateOf("") }
-    val keyboardController = LocalSoftwareKeyboardController.current
 
-    val filteredProducts = remember(products, searchQuery) {
-        if (searchQuery.isBlank()) {
-            products
-        } else {
-            products.filter { product ->
-                product.productName?.contains(searchQuery, ignoreCase = true) == true ||
-                product.brand?.contains(searchQuery, ignoreCase = true) == true
-            }
+    LaunchedEffect(Unit) {
+        println("Loaded ${products.size} products for category: $category")
+        if (products.isNotEmpty()) {
+            println("First product: ${products[0].productName} (${products[0].brand})")
         }
     }
 
+    val filteredProducts = remember(products, searchQuery) {
+        if (products.isEmpty()) return@remember emptyList<Product>()
+        if (searchQuery.isBlank()) return@remember products
+
+        val query = searchQuery.trim().lowercase()
+        products
+            .filter { product ->
+                listOf(
+                    product.productName?.lowercase(),
+                    product.brand?.lowercase(),
+                    product.id.lowercase()
+                ).any { it?.contains(query) == true }
+            }
+            .sortedBy { product ->
+                val nameMatch = product.productName?.lowercase() ?: ""
+                val brandMatch = product.brand?.lowercase() ?: ""
+                
+                when {
+                    nameMatch == query -> 0
+                    brandMatch == query -> 1
+                    nameMatch.isNotEmpty() && nameMatch.startsWith(query) -> 2
+                    brandMatch.isNotEmpty() && brandMatch.startsWith(query) -> 3
+                    nameMatch.isNotEmpty() && nameMatch.contains(query) -> 4
+                    brandMatch.isNotEmpty() && brandMatch.contains(query) -> 5
+                    else -> 6
+                }
+            }
+    }
+
     Column(modifier = Modifier.fillMaxSize()) {
-        // Top App Bar
         TopAppBar(
             title = { 
                 Text(
@@ -68,17 +98,23 @@ fun ProductSelectionScreen(dao: ProductDao, category: String, onProductsSelected
                 )
             },
             navigationIcon = {
-                IconButton(onClick = { /* Handle back navigation */ }) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                IconButton(onClick = { onProductsSelected(emptyList()) }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Back"
+                    )
                 }
             },
-            colors = TopAppBarDefaults.topAppBarColors(
+            colors = TopAppBarDefaults.smallTopAppBarColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer
             )
         )
 
-        Column(modifier = Modifier.padding(16.dp)) {
-            // Category header
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
             Text(
                 text = "Category: $category",
                 style = MaterialTheme.typography.titleMedium,
@@ -86,12 +122,16 @@ fun ProductSelectionScreen(dao: ProductDao, category: String, onProductsSelected
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
-            // Search bar
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = { searchQuery = it },
                 label = { Text("Search products or brands") },
-                leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
+                leadingIcon = { 
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = "Search"
+                    ) 
+                },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                 keyboardActions = KeyboardActions(
@@ -101,7 +141,6 @@ fun ProductSelectionScreen(dao: ProductDao, category: String, onProductsSelected
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Selection status
             Text(
                 text = "Selected: ${selectedProducts.size}/2 products",
                 style = MaterialTheme.typography.bodyMedium,
@@ -110,31 +149,63 @@ fun ProductSelectionScreen(dao: ProductDao, category: String, onProductsSelected
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Products list
-            LazyColumn(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                items(filteredProducts) { product ->
-                    ProductSelectionCard(
-                        product = product,
-                        isSelected = selectedProducts.contains(product),
-                        onToggleSelection = {
-                            selectedProducts = if (selectedProducts.contains(product)) {
-                                selectedProducts - product
-                            } else if (selectedProducts.size < 2) {
-                                selectedProducts + product
-                            } else {
-                                selectedProducts
-                            }
+            when {
+                products.isEmpty() -> {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "No products found. Please check your internet connection and try again.",
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+                filteredProducts.isEmpty() && searchQuery.isNotBlank() -> {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "No products match your search. Try different keywords.",
+                            textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+                else -> {
+                    LazyColumn(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        items(filteredProducts) { product ->
+                            ProductSelectionCard(
+                                product = product,
+                                isSelected = selectedProducts.contains(product),
+                                onToggleSelection = {
+                                    selectedProducts = if (selectedProducts.contains(product)) {
+                                        selectedProducts - product
+                                    } else if (selectedProducts.size < 2) {
+                                        selectedProducts + product
+                                    } else {
+                                        selectedProducts
+                                    }
+                                }
+                            )
                         }
-                    )
+                    }
                 }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Compare button
             Button(
                 onClick = { onProductsSelected(selectedProducts) },
                 enabled = selectedProducts.size == 2,

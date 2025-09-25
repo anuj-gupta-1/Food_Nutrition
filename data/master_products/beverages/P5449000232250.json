@@ -1,0 +1,68 @@
+{
+  "master_product_id": "P5449000232250",
+  "name": "PET 1.25L FUZE TEA PECHE",
+  "brand": "Fuze Tea",
+  "size": {
+    "value": 1.25,
+    "unit": "l"
+  },
+  "category": "Beverages",
+  "subcategory": "",
+  "nutrition": {
+    "per_100g": {
+      "energy": {
+        "kcal": 19,
+        "kj": 80
+      },
+      "macronutrients": {
+        "protein": {
+          "value": 0,
+          "unit": "g"
+        },
+        "carbohydrates": {
+          "total": {
+            "value": 4.3,
+            "unit": "g"
+          },
+          "sugars": {
+            "value": 4.3,
+            "unit": "g"
+          },
+          "fiber": {}
+        },
+        "fats": {
+          "total": {
+            "value": 0,
+            "unit": "g"
+          },
+          "saturated": {
+            "value": 0,
+            "unit": "g"
+          }
+        }
+      },
+      "minerals": {
+        "sodium": {
+          "value": 0.01,
+          "unit": "g"
+        }
+      }
+    },
+    "serving_size": "250ml"
+  },
+  "source_data": {
+    "primary_source": "openfoodfacts",
+    "sources": [
+      {
+        "id": "5449000232250",
+        "name": "openfoodfacts",
+        "fields_used": [
+          "nutrition",
+          "product_info"
+        ],
+        "url": "https://world.openfoodfacts.org/product/5449000232250/pet-1-25l-fuze-tea-peche"
+      }
+    ]
+  },
+  "last_updated": "2025-09-25T12:07:13.129973Z"
+}

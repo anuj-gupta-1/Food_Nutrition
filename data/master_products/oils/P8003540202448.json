@@ -1,0 +1,69 @@
+{
+  "master_product_id": "P8003540202448",
+  "name": "Zucchi Olio Extravergine di oliva",
+  "brand": "Zucchi",
+  "size": {
+    "value": 100,
+    "unit": "g"
+  },
+  "category": "Oils",
+  "subcategory": "",
+  "nutrition": {
+    "per_100g": {
+      "energy": {
+        "kcal": 823
+      },
+      "macronutrients": {
+        "protein": {
+          "value": 0,
+          "unit": "g"
+        },
+        "carbohydrates": {
+          "total": {
+            "value": 0,
+            "unit": "g"
+          },
+          "sugars": {
+            "value": 0,
+            "unit": "g"
+          },
+          "fiber": {
+            "value": 0,
+            "unit": "g"
+          }
+        },
+        "fats": {
+          "total": {
+            "value": 91.4,
+            "unit": "g"
+          },
+          "saturated": {
+            "value": 13.7,
+            "unit": "g"
+          }
+        }
+      },
+      "minerals": {
+        "sodium": {
+          "value": 0,
+          "unit": "g"
+        }
+      }
+    }
+  },
+  "source_data": {
+    "primary_source": "openfoodfacts",
+    "sources": [
+      {
+        "id": "8003540202448",
+        "name": "openfoodfacts",
+        "fields_used": [
+          "nutrition",
+          "product_info"
+        ],
+        "url": "https://world.openfoodfacts.org/product/8003540202448/zucchi-olio-extravergine-di-oliva"
+      }
+    ]
+  },
+  "last_updated": "2025-09-25T12:07:13.096188Z"
+}
