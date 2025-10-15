@@ -15,6 +15,7 @@ import java.lang.Class;
 import java.lang.Double;
 import java.lang.Exception;
 import java.lang.Integer;
+import java.lang.Long;
 import java.lang.Object;
 import java.lang.Override;
 import java.lang.String;
@@ -43,88 +44,77 @@ public final class ProductDao_Impl implements ProductDao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR REPLACE INTO `products` (`id`,`productName`,`brand`,`category`,`ingredients`,`servingSize`,`nutritionPer`,`energyKcal100g`,`fat100g`,`saturatedFat100g`,`carbs100g`,`sugars100g`,`protein100g`,`salt100g`,`fiber100g`,`sodium100g`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        return "INSERT OR REPLACE INTO `products` (`id`,`product_name`,`brand`,`category`,`subcategory`,`size_value`,`size_unit`,`price`,`source`,`source_url`,`ingredients`,`image_url`,`last_updated`,`search_count`,`llm_fallback_used`,`data_quality_score`,`available`,`standardUnit`,`nutritionSource`,`lastChecked`,`version`,`createdAt`,`updatedAt`,`firebase_uploaded`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
       }
 
       @Override
       protected void bind(@NonNull final SupportSQLiteStatement statement,
           @NonNull final Product entity) {
         statement.bindString(1, entity.getId());
-        if (entity.getProductName() == null) {
-          statement.bindNull(2);
-        } else {
-          statement.bindString(2, entity.getProductName());
-        }
-        if (entity.getBrand() == null) {
-          statement.bindNull(3);
-        } else {
-          statement.bindString(3, entity.getBrand());
-        }
-        if (entity.getCategory() == null) {
-          statement.bindNull(4);
-        } else {
-          statement.bindString(4, entity.getCategory());
-        }
-        if (entity.getIngredients() == null) {
+        statement.bindString(2, entity.getProduct_name());
+        statement.bindString(3, entity.getBrand());
+        statement.bindString(4, entity.getCategory());
+        if (entity.getSubcategory() == null) {
           statement.bindNull(5);
         } else {
-          statement.bindString(5, entity.getIngredients());
+          statement.bindString(5, entity.getSubcategory());
         }
-        if (entity.getServingSize() == null) {
+        if (entity.getSize_value() == null) {
           statement.bindNull(6);
         } else {
-          statement.bindString(6, entity.getServingSize());
+          statement.bindDouble(6, entity.getSize_value());
         }
-        if (entity.getNutritionPer() == null) {
+        if (entity.getSize_unit() == null) {
           statement.bindNull(7);
         } else {
-          statement.bindString(7, entity.getNutritionPer());
+          statement.bindString(7, entity.getSize_unit());
         }
-        if (entity.getEnergyKcal100g() == null) {
+        if (entity.getPrice() == null) {
           statement.bindNull(8);
         } else {
-          statement.bindDouble(8, entity.getEnergyKcal100g());
+          statement.bindDouble(8, entity.getPrice());
         }
-        if (entity.getFat100g() == null) {
-          statement.bindNull(9);
-        } else {
-          statement.bindDouble(9, entity.getFat100g());
-        }
-        if (entity.getSaturatedFat100g() == null) {
+        statement.bindString(9, entity.getSource());
+        if (entity.getSource_url() == null) {
           statement.bindNull(10);
         } else {
-          statement.bindDouble(10, entity.getSaturatedFat100g());
+          statement.bindString(10, entity.getSource_url());
         }
-        if (entity.getCarbs100g() == null) {
+        if (entity.getIngredients() == null) {
           statement.bindNull(11);
         } else {
-          statement.bindDouble(11, entity.getCarbs100g());
+          statement.bindString(11, entity.getIngredients());
         }
-        if (entity.getSugars100g() == null) {
+        if (entity.getImage_url() == null) {
           statement.bindNull(12);
         } else {
-          statement.bindDouble(12, entity.getSugars100g());
+          statement.bindString(12, entity.getImage_url());
         }
-        if (entity.getProtein100g() == null) {
+        if (entity.getLast_updated() == null) {
           statement.bindNull(13);
         } else {
-          statement.bindDouble(13, entity.getProtein100g());
+          statement.bindString(13, entity.getLast_updated());
         }
-        if (entity.getSalt100g() == null) {
-          statement.bindNull(14);
+        statement.bindLong(14, entity.getSearch_count());
+        final int _tmp = entity.getLlm_fallback_used() ? 1 : 0;
+        statement.bindLong(15, _tmp);
+        statement.bindLong(16, entity.getData_quality_score());
+        final NutritionData _tmpNutrition_data = entity.getNutrition_data();
+        final int _tmp_1 = _tmpNutrition_data.getAvailable() ? 1 : 0;
+        statement.bindLong(17, _tmp_1);
+        statement.bindString(18, _tmpNutrition_data.getStandardUnit());
+        statement.bindString(19, _tmpNutrition_data.getNutritionSource());
+        if (_tmpNutrition_data.getLastChecked() == null) {
+          statement.bindNull(20);
         } else {
-          statement.bindDouble(14, entity.getSalt100g());
+          statement.bindLong(20, _tmpNutrition_data.getLastChecked());
         }
-        if (entity.getFiber100g() == null) {
-          statement.bindNull(15);
-        } else {
-          statement.bindDouble(15, entity.getFiber100g());
-        }
-        if (entity.getSodium100g() == null) {
-          statement.bindNull(16);
-        } else {
-          statement.bindDouble(16, entity.getSodium100g());
-        }
+        final ProductMetadata _tmpMetadata = entity.getMetadata();
+        statement.bindLong(21, _tmpMetadata.getVersion());
+        statement.bindLong(22, _tmpMetadata.getCreatedAt());
+        statement.bindLong(23, _tmpMetadata.getUpdatedAt());
+        final int _tmp_2 = _tmpMetadata.getFirebase_uploaded() ? 1 : 0;
+        statement.bindLong(24, _tmp_2);
       }
     };
     this.__preparedStmtOfDeleteAll = new SharedSQLiteStatement(__db) {
@@ -192,43 +182,71 @@ public final class ProductDao_Impl implements ProductDao {
         final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
         try {
           final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
-          final int _cursorIndexOfProductName = CursorUtil.getColumnIndexOrThrow(_cursor, "productName");
+          final int _cursorIndexOfProductName = CursorUtil.getColumnIndexOrThrow(_cursor, "product_name");
           final int _cursorIndexOfBrand = CursorUtil.getColumnIndexOrThrow(_cursor, "brand");
           final int _cursorIndexOfCategory = CursorUtil.getColumnIndexOrThrow(_cursor, "category");
+          final int _cursorIndexOfSubcategory = CursorUtil.getColumnIndexOrThrow(_cursor, "subcategory");
+          final int _cursorIndexOfSizeValue = CursorUtil.getColumnIndexOrThrow(_cursor, "size_value");
+          final int _cursorIndexOfSizeUnit = CursorUtil.getColumnIndexOrThrow(_cursor, "size_unit");
+          final int _cursorIndexOfPrice = CursorUtil.getColumnIndexOrThrow(_cursor, "price");
+          final int _cursorIndexOfSource = CursorUtil.getColumnIndexOrThrow(_cursor, "source");
+          final int _cursorIndexOfSourceUrl = CursorUtil.getColumnIndexOrThrow(_cursor, "source_url");
           final int _cursorIndexOfIngredients = CursorUtil.getColumnIndexOrThrow(_cursor, "ingredients");
-          final int _cursorIndexOfServingSize = CursorUtil.getColumnIndexOrThrow(_cursor, "servingSize");
-          final int _cursorIndexOfNutritionPer = CursorUtil.getColumnIndexOrThrow(_cursor, "nutritionPer");
-          final int _cursorIndexOfEnergyKcal100g = CursorUtil.getColumnIndexOrThrow(_cursor, "energyKcal100g");
-          final int _cursorIndexOfFat100g = CursorUtil.getColumnIndexOrThrow(_cursor, "fat100g");
-          final int _cursorIndexOfSaturatedFat100g = CursorUtil.getColumnIndexOrThrow(_cursor, "saturatedFat100g");
-          final int _cursorIndexOfCarbs100g = CursorUtil.getColumnIndexOrThrow(_cursor, "carbs100g");
-          final int _cursorIndexOfSugars100g = CursorUtil.getColumnIndexOrThrow(_cursor, "sugars100g");
-          final int _cursorIndexOfProtein100g = CursorUtil.getColumnIndexOrThrow(_cursor, "protein100g");
-          final int _cursorIndexOfSalt100g = CursorUtil.getColumnIndexOrThrow(_cursor, "salt100g");
-          final int _cursorIndexOfFiber100g = CursorUtil.getColumnIndexOrThrow(_cursor, "fiber100g");
-          final int _cursorIndexOfSodium100g = CursorUtil.getColumnIndexOrThrow(_cursor, "sodium100g");
+          final int _cursorIndexOfImageUrl = CursorUtil.getColumnIndexOrThrow(_cursor, "image_url");
+          final int _cursorIndexOfLastUpdated = CursorUtil.getColumnIndexOrThrow(_cursor, "last_updated");
+          final int _cursorIndexOfSearchCount = CursorUtil.getColumnIndexOrThrow(_cursor, "search_count");
+          final int _cursorIndexOfLlmFallbackUsed = CursorUtil.getColumnIndexOrThrow(_cursor, "llm_fallback_used");
+          final int _cursorIndexOfDataQualityScore = CursorUtil.getColumnIndexOrThrow(_cursor, "data_quality_score");
+          final int _cursorIndexOfAvailable = CursorUtil.getColumnIndexOrThrow(_cursor, "available");
+          final int _cursorIndexOfStandardUnit = CursorUtil.getColumnIndexOrThrow(_cursor, "standardUnit");
+          final int _cursorIndexOfNutritionSource = CursorUtil.getColumnIndexOrThrow(_cursor, "nutritionSource");
+          final int _cursorIndexOfLastChecked = CursorUtil.getColumnIndexOrThrow(_cursor, "lastChecked");
+          final int _cursorIndexOfVersion = CursorUtil.getColumnIndexOrThrow(_cursor, "version");
+          final int _cursorIndexOfCreatedAt = CursorUtil.getColumnIndexOrThrow(_cursor, "createdAt");
+          final int _cursorIndexOfUpdatedAt = CursorUtil.getColumnIndexOrThrow(_cursor, "updatedAt");
+          final int _cursorIndexOfFirebaseUploaded = CursorUtil.getColumnIndexOrThrow(_cursor, "firebase_uploaded");
           final List<Product> _result = new ArrayList<Product>(_cursor.getCount());
           while (_cursor.moveToNext()) {
             final Product _item;
             final String _tmpId;
             _tmpId = _cursor.getString(_cursorIndexOfId);
-            final String _tmpProductName;
-            if (_cursor.isNull(_cursorIndexOfProductName)) {
-              _tmpProductName = null;
-            } else {
-              _tmpProductName = _cursor.getString(_cursorIndexOfProductName);
-            }
+            final String _tmpProduct_name;
+            _tmpProduct_name = _cursor.getString(_cursorIndexOfProductName);
             final String _tmpBrand;
-            if (_cursor.isNull(_cursorIndexOfBrand)) {
-              _tmpBrand = null;
-            } else {
-              _tmpBrand = _cursor.getString(_cursorIndexOfBrand);
-            }
+            _tmpBrand = _cursor.getString(_cursorIndexOfBrand);
             final String _tmpCategory;
-            if (_cursor.isNull(_cursorIndexOfCategory)) {
-              _tmpCategory = null;
+            _tmpCategory = _cursor.getString(_cursorIndexOfCategory);
+            final String _tmpSubcategory;
+            if (_cursor.isNull(_cursorIndexOfSubcategory)) {
+              _tmpSubcategory = null;
             } else {
-              _tmpCategory = _cursor.getString(_cursorIndexOfCategory);
+              _tmpSubcategory = _cursor.getString(_cursorIndexOfSubcategory);
+            }
+            final Double _tmpSize_value;
+            if (_cursor.isNull(_cursorIndexOfSizeValue)) {
+              _tmpSize_value = null;
+            } else {
+              _tmpSize_value = _cursor.getDouble(_cursorIndexOfSizeValue);
+            }
+            final String _tmpSize_unit;
+            if (_cursor.isNull(_cursorIndexOfSizeUnit)) {
+              _tmpSize_unit = null;
+            } else {
+              _tmpSize_unit = _cursor.getString(_cursorIndexOfSizeUnit);
+            }
+            final Double _tmpPrice;
+            if (_cursor.isNull(_cursorIndexOfPrice)) {
+              _tmpPrice = null;
+            } else {
+              _tmpPrice = _cursor.getDouble(_cursorIndexOfPrice);
+            }
+            final String _tmpSource;
+            _tmpSource = _cursor.getString(_cursorIndexOfSource);
+            final String _tmpSource_url;
+            if (_cursor.isNull(_cursorIndexOfSourceUrl)) {
+              _tmpSource_url = null;
+            } else {
+              _tmpSource_url = _cursor.getString(_cursorIndexOfSourceUrl);
             }
             final String _tmpIngredients;
             if (_cursor.isNull(_cursorIndexOfIngredients)) {
@@ -236,73 +254,355 @@ public final class ProductDao_Impl implements ProductDao {
             } else {
               _tmpIngredients = _cursor.getString(_cursorIndexOfIngredients);
             }
-            final String _tmpServingSize;
-            if (_cursor.isNull(_cursorIndexOfServingSize)) {
-              _tmpServingSize = null;
+            final String _tmpImage_url;
+            if (_cursor.isNull(_cursorIndexOfImageUrl)) {
+              _tmpImage_url = null;
             } else {
-              _tmpServingSize = _cursor.getString(_cursorIndexOfServingSize);
+              _tmpImage_url = _cursor.getString(_cursorIndexOfImageUrl);
             }
-            final String _tmpNutritionPer;
-            if (_cursor.isNull(_cursorIndexOfNutritionPer)) {
-              _tmpNutritionPer = null;
+            final String _tmpLast_updated;
+            if (_cursor.isNull(_cursorIndexOfLastUpdated)) {
+              _tmpLast_updated = null;
             } else {
-              _tmpNutritionPer = _cursor.getString(_cursorIndexOfNutritionPer);
+              _tmpLast_updated = _cursor.getString(_cursorIndexOfLastUpdated);
             }
-            final Double _tmpEnergyKcal100g;
-            if (_cursor.isNull(_cursorIndexOfEnergyKcal100g)) {
-              _tmpEnergyKcal100g = null;
+            final int _tmpSearch_count;
+            _tmpSearch_count = _cursor.getInt(_cursorIndexOfSearchCount);
+            final boolean _tmpLlm_fallback_used;
+            final int _tmp;
+            _tmp = _cursor.getInt(_cursorIndexOfLlmFallbackUsed);
+            _tmpLlm_fallback_used = _tmp != 0;
+            final int _tmpData_quality_score;
+            _tmpData_quality_score = _cursor.getInt(_cursorIndexOfDataQualityScore);
+            final NutritionData _tmpNutrition_data;
+            final boolean _tmpAvailable;
+            final int _tmp_1;
+            _tmp_1 = _cursor.getInt(_cursorIndexOfAvailable);
+            _tmpAvailable = _tmp_1 != 0;
+            final String _tmpStandardUnit;
+            _tmpStandardUnit = _cursor.getString(_cursorIndexOfStandardUnit);
+            final String _tmpNutritionSource;
+            _tmpNutritionSource = _cursor.getString(_cursorIndexOfNutritionSource);
+            final Long _tmpLastChecked;
+            if (_cursor.isNull(_cursorIndexOfLastChecked)) {
+              _tmpLastChecked = null;
             } else {
-              _tmpEnergyKcal100g = _cursor.getDouble(_cursorIndexOfEnergyKcal100g);
+              _tmpLastChecked = _cursor.getLong(_cursorIndexOfLastChecked);
             }
-            final Double _tmpFat100g;
-            if (_cursor.isNull(_cursorIndexOfFat100g)) {
-              _tmpFat100g = null;
+            _tmpNutrition_data = new NutritionData(_tmpAvailable,_tmpStandardUnit,_tmpNutritionSource,_tmpLastChecked);
+            final ProductMetadata _tmpMetadata;
+            final int _tmpVersion;
+            _tmpVersion = _cursor.getInt(_cursorIndexOfVersion);
+            final long _tmpCreatedAt;
+            _tmpCreatedAt = _cursor.getLong(_cursorIndexOfCreatedAt);
+            final long _tmpUpdatedAt;
+            _tmpUpdatedAt = _cursor.getLong(_cursorIndexOfUpdatedAt);
+            final boolean _tmpFirebase_uploaded;
+            final int _tmp_2;
+            _tmp_2 = _cursor.getInt(_cursorIndexOfFirebaseUploaded);
+            _tmpFirebase_uploaded = _tmp_2 != 0;
+            _tmpMetadata = new ProductMetadata(_tmpVersion,_tmpCreatedAt,_tmpUpdatedAt,_tmpFirebase_uploaded);
+            _item = new Product(_tmpId,_tmpProduct_name,_tmpBrand,_tmpCategory,_tmpSubcategory,_tmpSize_value,_tmpSize_unit,_tmpPrice,_tmpSource,_tmpSource_url,_tmpIngredients,_tmpNutrition_data,_tmpImage_url,_tmpLast_updated,_tmpSearch_count,_tmpLlm_fallback_used,_tmpData_quality_score,_tmpMetadata);
+            _result.add(_item);
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+        }
+      }
+
+      @Override
+      protected void finalize() {
+        _statement.release();
+      }
+    });
+  }
+
+  @Override
+  public Flow<List<Product>> searchProducts(final String query) {
+    final String _sql = "SELECT * FROM products WHERE product_name LIKE '%' || ? || '%' OR brand LIKE '%' || ? || '%'";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 2);
+    int _argIndex = 1;
+    _statement.bindString(_argIndex, query);
+    _argIndex = 2;
+    _statement.bindString(_argIndex, query);
+    return CoroutinesRoom.createFlow(__db, false, new String[] {"products"}, new Callable<List<Product>>() {
+      @Override
+      @NonNull
+      public List<Product> call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfProductName = CursorUtil.getColumnIndexOrThrow(_cursor, "product_name");
+          final int _cursorIndexOfBrand = CursorUtil.getColumnIndexOrThrow(_cursor, "brand");
+          final int _cursorIndexOfCategory = CursorUtil.getColumnIndexOrThrow(_cursor, "category");
+          final int _cursorIndexOfSubcategory = CursorUtil.getColumnIndexOrThrow(_cursor, "subcategory");
+          final int _cursorIndexOfSizeValue = CursorUtil.getColumnIndexOrThrow(_cursor, "size_value");
+          final int _cursorIndexOfSizeUnit = CursorUtil.getColumnIndexOrThrow(_cursor, "size_unit");
+          final int _cursorIndexOfPrice = CursorUtil.getColumnIndexOrThrow(_cursor, "price");
+          final int _cursorIndexOfSource = CursorUtil.getColumnIndexOrThrow(_cursor, "source");
+          final int _cursorIndexOfSourceUrl = CursorUtil.getColumnIndexOrThrow(_cursor, "source_url");
+          final int _cursorIndexOfIngredients = CursorUtil.getColumnIndexOrThrow(_cursor, "ingredients");
+          final int _cursorIndexOfImageUrl = CursorUtil.getColumnIndexOrThrow(_cursor, "image_url");
+          final int _cursorIndexOfLastUpdated = CursorUtil.getColumnIndexOrThrow(_cursor, "last_updated");
+          final int _cursorIndexOfSearchCount = CursorUtil.getColumnIndexOrThrow(_cursor, "search_count");
+          final int _cursorIndexOfLlmFallbackUsed = CursorUtil.getColumnIndexOrThrow(_cursor, "llm_fallback_used");
+          final int _cursorIndexOfDataQualityScore = CursorUtil.getColumnIndexOrThrow(_cursor, "data_quality_score");
+          final int _cursorIndexOfAvailable = CursorUtil.getColumnIndexOrThrow(_cursor, "available");
+          final int _cursorIndexOfStandardUnit = CursorUtil.getColumnIndexOrThrow(_cursor, "standardUnit");
+          final int _cursorIndexOfNutritionSource = CursorUtil.getColumnIndexOrThrow(_cursor, "nutritionSource");
+          final int _cursorIndexOfLastChecked = CursorUtil.getColumnIndexOrThrow(_cursor, "lastChecked");
+          final int _cursorIndexOfVersion = CursorUtil.getColumnIndexOrThrow(_cursor, "version");
+          final int _cursorIndexOfCreatedAt = CursorUtil.getColumnIndexOrThrow(_cursor, "createdAt");
+          final int _cursorIndexOfUpdatedAt = CursorUtil.getColumnIndexOrThrow(_cursor, "updatedAt");
+          final int _cursorIndexOfFirebaseUploaded = CursorUtil.getColumnIndexOrThrow(_cursor, "firebase_uploaded");
+          final List<Product> _result = new ArrayList<Product>(_cursor.getCount());
+          while (_cursor.moveToNext()) {
+            final Product _item;
+            final String _tmpId;
+            _tmpId = _cursor.getString(_cursorIndexOfId);
+            final String _tmpProduct_name;
+            _tmpProduct_name = _cursor.getString(_cursorIndexOfProductName);
+            final String _tmpBrand;
+            _tmpBrand = _cursor.getString(_cursorIndexOfBrand);
+            final String _tmpCategory;
+            _tmpCategory = _cursor.getString(_cursorIndexOfCategory);
+            final String _tmpSubcategory;
+            if (_cursor.isNull(_cursorIndexOfSubcategory)) {
+              _tmpSubcategory = null;
             } else {
-              _tmpFat100g = _cursor.getDouble(_cursorIndexOfFat100g);
+              _tmpSubcategory = _cursor.getString(_cursorIndexOfSubcategory);
             }
-            final Double _tmpSaturatedFat100g;
-            if (_cursor.isNull(_cursorIndexOfSaturatedFat100g)) {
-              _tmpSaturatedFat100g = null;
+            final Double _tmpSize_value;
+            if (_cursor.isNull(_cursorIndexOfSizeValue)) {
+              _tmpSize_value = null;
             } else {
-              _tmpSaturatedFat100g = _cursor.getDouble(_cursorIndexOfSaturatedFat100g);
+              _tmpSize_value = _cursor.getDouble(_cursorIndexOfSizeValue);
             }
-            final Double _tmpCarbs100g;
-            if (_cursor.isNull(_cursorIndexOfCarbs100g)) {
-              _tmpCarbs100g = null;
+            final String _tmpSize_unit;
+            if (_cursor.isNull(_cursorIndexOfSizeUnit)) {
+              _tmpSize_unit = null;
             } else {
-              _tmpCarbs100g = _cursor.getDouble(_cursorIndexOfCarbs100g);
+              _tmpSize_unit = _cursor.getString(_cursorIndexOfSizeUnit);
             }
-            final Double _tmpSugars100g;
-            if (_cursor.isNull(_cursorIndexOfSugars100g)) {
-              _tmpSugars100g = null;
+            final Double _tmpPrice;
+            if (_cursor.isNull(_cursorIndexOfPrice)) {
+              _tmpPrice = null;
             } else {
-              _tmpSugars100g = _cursor.getDouble(_cursorIndexOfSugars100g);
+              _tmpPrice = _cursor.getDouble(_cursorIndexOfPrice);
             }
-            final Double _tmpProtein100g;
-            if (_cursor.isNull(_cursorIndexOfProtein100g)) {
-              _tmpProtein100g = null;
+            final String _tmpSource;
+            _tmpSource = _cursor.getString(_cursorIndexOfSource);
+            final String _tmpSource_url;
+            if (_cursor.isNull(_cursorIndexOfSourceUrl)) {
+              _tmpSource_url = null;
             } else {
-              _tmpProtein100g = _cursor.getDouble(_cursorIndexOfProtein100g);
+              _tmpSource_url = _cursor.getString(_cursorIndexOfSourceUrl);
             }
-            final Double _tmpSalt100g;
-            if (_cursor.isNull(_cursorIndexOfSalt100g)) {
-              _tmpSalt100g = null;
+            final String _tmpIngredients;
+            if (_cursor.isNull(_cursorIndexOfIngredients)) {
+              _tmpIngredients = null;
             } else {
-              _tmpSalt100g = _cursor.getDouble(_cursorIndexOfSalt100g);
+              _tmpIngredients = _cursor.getString(_cursorIndexOfIngredients);
             }
-            final Double _tmpFiber100g;
-            if (_cursor.isNull(_cursorIndexOfFiber100g)) {
-              _tmpFiber100g = null;
+            final String _tmpImage_url;
+            if (_cursor.isNull(_cursorIndexOfImageUrl)) {
+              _tmpImage_url = null;
             } else {
-              _tmpFiber100g = _cursor.getDouble(_cursorIndexOfFiber100g);
+              _tmpImage_url = _cursor.getString(_cursorIndexOfImageUrl);
             }
-            final Double _tmpSodium100g;
-            if (_cursor.isNull(_cursorIndexOfSodium100g)) {
-              _tmpSodium100g = null;
+            final String _tmpLast_updated;
+            if (_cursor.isNull(_cursorIndexOfLastUpdated)) {
+              _tmpLast_updated = null;
             } else {
-              _tmpSodium100g = _cursor.getDouble(_cursorIndexOfSodium100g);
+              _tmpLast_updated = _cursor.getString(_cursorIndexOfLastUpdated);
             }
-            _item = new Product(_tmpId,_tmpProductName,_tmpBrand,_tmpCategory,_tmpIngredients,_tmpServingSize,_tmpNutritionPer,_tmpEnergyKcal100g,_tmpFat100g,_tmpSaturatedFat100g,_tmpCarbs100g,_tmpSugars100g,_tmpProtein100g,_tmpSalt100g,_tmpFiber100g,_tmpSodium100g);
+            final int _tmpSearch_count;
+            _tmpSearch_count = _cursor.getInt(_cursorIndexOfSearchCount);
+            final boolean _tmpLlm_fallback_used;
+            final int _tmp;
+            _tmp = _cursor.getInt(_cursorIndexOfLlmFallbackUsed);
+            _tmpLlm_fallback_used = _tmp != 0;
+            final int _tmpData_quality_score;
+            _tmpData_quality_score = _cursor.getInt(_cursorIndexOfDataQualityScore);
+            final NutritionData _tmpNutrition_data;
+            final boolean _tmpAvailable;
+            final int _tmp_1;
+            _tmp_1 = _cursor.getInt(_cursorIndexOfAvailable);
+            _tmpAvailable = _tmp_1 != 0;
+            final String _tmpStandardUnit;
+            _tmpStandardUnit = _cursor.getString(_cursorIndexOfStandardUnit);
+            final String _tmpNutritionSource;
+            _tmpNutritionSource = _cursor.getString(_cursorIndexOfNutritionSource);
+            final Long _tmpLastChecked;
+            if (_cursor.isNull(_cursorIndexOfLastChecked)) {
+              _tmpLastChecked = null;
+            } else {
+              _tmpLastChecked = _cursor.getLong(_cursorIndexOfLastChecked);
+            }
+            _tmpNutrition_data = new NutritionData(_tmpAvailable,_tmpStandardUnit,_tmpNutritionSource,_tmpLastChecked);
+            final ProductMetadata _tmpMetadata;
+            final int _tmpVersion;
+            _tmpVersion = _cursor.getInt(_cursorIndexOfVersion);
+            final long _tmpCreatedAt;
+            _tmpCreatedAt = _cursor.getLong(_cursorIndexOfCreatedAt);
+            final long _tmpUpdatedAt;
+            _tmpUpdatedAt = _cursor.getLong(_cursorIndexOfUpdatedAt);
+            final boolean _tmpFirebase_uploaded;
+            final int _tmp_2;
+            _tmp_2 = _cursor.getInt(_cursorIndexOfFirebaseUploaded);
+            _tmpFirebase_uploaded = _tmp_2 != 0;
+            _tmpMetadata = new ProductMetadata(_tmpVersion,_tmpCreatedAt,_tmpUpdatedAt,_tmpFirebase_uploaded);
+            _item = new Product(_tmpId,_tmpProduct_name,_tmpBrand,_tmpCategory,_tmpSubcategory,_tmpSize_value,_tmpSize_unit,_tmpPrice,_tmpSource,_tmpSource_url,_tmpIngredients,_tmpNutrition_data,_tmpImage_url,_tmpLast_updated,_tmpSearch_count,_tmpLlm_fallback_used,_tmpData_quality_score,_tmpMetadata);
+            _result.add(_item);
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+        }
+      }
+
+      @Override
+      protected void finalize() {
+        _statement.release();
+      }
+    });
+  }
+
+  @Override
+  public Flow<List<Product>> getProductsBySource(final String source) {
+    final String _sql = "SELECT * FROM products WHERE source = ?";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
+    int _argIndex = 1;
+    _statement.bindString(_argIndex, source);
+    return CoroutinesRoom.createFlow(__db, false, new String[] {"products"}, new Callable<List<Product>>() {
+      @Override
+      @NonNull
+      public List<Product> call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfProductName = CursorUtil.getColumnIndexOrThrow(_cursor, "product_name");
+          final int _cursorIndexOfBrand = CursorUtil.getColumnIndexOrThrow(_cursor, "brand");
+          final int _cursorIndexOfCategory = CursorUtil.getColumnIndexOrThrow(_cursor, "category");
+          final int _cursorIndexOfSubcategory = CursorUtil.getColumnIndexOrThrow(_cursor, "subcategory");
+          final int _cursorIndexOfSizeValue = CursorUtil.getColumnIndexOrThrow(_cursor, "size_value");
+          final int _cursorIndexOfSizeUnit = CursorUtil.getColumnIndexOrThrow(_cursor, "size_unit");
+          final int _cursorIndexOfPrice = CursorUtil.getColumnIndexOrThrow(_cursor, "price");
+          final int _cursorIndexOfSource = CursorUtil.getColumnIndexOrThrow(_cursor, "source");
+          final int _cursorIndexOfSourceUrl = CursorUtil.getColumnIndexOrThrow(_cursor, "source_url");
+          final int _cursorIndexOfIngredients = CursorUtil.getColumnIndexOrThrow(_cursor, "ingredients");
+          final int _cursorIndexOfImageUrl = CursorUtil.getColumnIndexOrThrow(_cursor, "image_url");
+          final int _cursorIndexOfLastUpdated = CursorUtil.getColumnIndexOrThrow(_cursor, "last_updated");
+          final int _cursorIndexOfSearchCount = CursorUtil.getColumnIndexOrThrow(_cursor, "search_count");
+          final int _cursorIndexOfLlmFallbackUsed = CursorUtil.getColumnIndexOrThrow(_cursor, "llm_fallback_used");
+          final int _cursorIndexOfDataQualityScore = CursorUtil.getColumnIndexOrThrow(_cursor, "data_quality_score");
+          final int _cursorIndexOfAvailable = CursorUtil.getColumnIndexOrThrow(_cursor, "available");
+          final int _cursorIndexOfStandardUnit = CursorUtil.getColumnIndexOrThrow(_cursor, "standardUnit");
+          final int _cursorIndexOfNutritionSource = CursorUtil.getColumnIndexOrThrow(_cursor, "nutritionSource");
+          final int _cursorIndexOfLastChecked = CursorUtil.getColumnIndexOrThrow(_cursor, "lastChecked");
+          final int _cursorIndexOfVersion = CursorUtil.getColumnIndexOrThrow(_cursor, "version");
+          final int _cursorIndexOfCreatedAt = CursorUtil.getColumnIndexOrThrow(_cursor, "createdAt");
+          final int _cursorIndexOfUpdatedAt = CursorUtil.getColumnIndexOrThrow(_cursor, "updatedAt");
+          final int _cursorIndexOfFirebaseUploaded = CursorUtil.getColumnIndexOrThrow(_cursor, "firebase_uploaded");
+          final List<Product> _result = new ArrayList<Product>(_cursor.getCount());
+          while (_cursor.moveToNext()) {
+            final Product _item;
+            final String _tmpId;
+            _tmpId = _cursor.getString(_cursorIndexOfId);
+            final String _tmpProduct_name;
+            _tmpProduct_name = _cursor.getString(_cursorIndexOfProductName);
+            final String _tmpBrand;
+            _tmpBrand = _cursor.getString(_cursorIndexOfBrand);
+            final String _tmpCategory;
+            _tmpCategory = _cursor.getString(_cursorIndexOfCategory);
+            final String _tmpSubcategory;
+            if (_cursor.isNull(_cursorIndexOfSubcategory)) {
+              _tmpSubcategory = null;
+            } else {
+              _tmpSubcategory = _cursor.getString(_cursorIndexOfSubcategory);
+            }
+            final Double _tmpSize_value;
+            if (_cursor.isNull(_cursorIndexOfSizeValue)) {
+              _tmpSize_value = null;
+            } else {
+              _tmpSize_value = _cursor.getDouble(_cursorIndexOfSizeValue);
+            }
+            final String _tmpSize_unit;
+            if (_cursor.isNull(_cursorIndexOfSizeUnit)) {
+              _tmpSize_unit = null;
+            } else {
+              _tmpSize_unit = _cursor.getString(_cursorIndexOfSizeUnit);
+            }
+            final Double _tmpPrice;
+            if (_cursor.isNull(_cursorIndexOfPrice)) {
+              _tmpPrice = null;
+            } else {
+              _tmpPrice = _cursor.getDouble(_cursorIndexOfPrice);
+            }
+            final String _tmpSource;
+            _tmpSource = _cursor.getString(_cursorIndexOfSource);
+            final String _tmpSource_url;
+            if (_cursor.isNull(_cursorIndexOfSourceUrl)) {
+              _tmpSource_url = null;
+            } else {
+              _tmpSource_url = _cursor.getString(_cursorIndexOfSourceUrl);
+            }
+            final String _tmpIngredients;
+            if (_cursor.isNull(_cursorIndexOfIngredients)) {
+              _tmpIngredients = null;
+            } else {
+              _tmpIngredients = _cursor.getString(_cursorIndexOfIngredients);
+            }
+            final String _tmpImage_url;
+            if (_cursor.isNull(_cursorIndexOfImageUrl)) {
+              _tmpImage_url = null;
+            } else {
+              _tmpImage_url = _cursor.getString(_cursorIndexOfImageUrl);
+            }
+            final String _tmpLast_updated;
+            if (_cursor.isNull(_cursorIndexOfLastUpdated)) {
+              _tmpLast_updated = null;
+            } else {
+              _tmpLast_updated = _cursor.getString(_cursorIndexOfLastUpdated);
+            }
+            final int _tmpSearch_count;
+            _tmpSearch_count = _cursor.getInt(_cursorIndexOfSearchCount);
+            final boolean _tmpLlm_fallback_used;
+            final int _tmp;
+            _tmp = _cursor.getInt(_cursorIndexOfLlmFallbackUsed);
+            _tmpLlm_fallback_used = _tmp != 0;
+            final int _tmpData_quality_score;
+            _tmpData_quality_score = _cursor.getInt(_cursorIndexOfDataQualityScore);
+            final NutritionData _tmpNutrition_data;
+            final boolean _tmpAvailable;
+            final int _tmp_1;
+            _tmp_1 = _cursor.getInt(_cursorIndexOfAvailable);
+            _tmpAvailable = _tmp_1 != 0;
+            final String _tmpStandardUnit;
+            _tmpStandardUnit = _cursor.getString(_cursorIndexOfStandardUnit);
+            final String _tmpNutritionSource;
+            _tmpNutritionSource = _cursor.getString(_cursorIndexOfNutritionSource);
+            final Long _tmpLastChecked;
+            if (_cursor.isNull(_cursorIndexOfLastChecked)) {
+              _tmpLastChecked = null;
+            } else {
+              _tmpLastChecked = _cursor.getLong(_cursorIndexOfLastChecked);
+            }
+            _tmpNutrition_data = new NutritionData(_tmpAvailable,_tmpStandardUnit,_tmpNutritionSource,_tmpLastChecked);
+            final ProductMetadata _tmpMetadata;
+            final int _tmpVersion;
+            _tmpVersion = _cursor.getInt(_cursorIndexOfVersion);
+            final long _tmpCreatedAt;
+            _tmpCreatedAt = _cursor.getLong(_cursorIndexOfCreatedAt);
+            final long _tmpUpdatedAt;
+            _tmpUpdatedAt = _cursor.getLong(_cursorIndexOfUpdatedAt);
+            final boolean _tmpFirebase_uploaded;
+            final int _tmp_2;
+            _tmp_2 = _cursor.getInt(_cursorIndexOfFirebaseUploaded);
+            _tmpFirebase_uploaded = _tmp_2 != 0;
+            _tmpMetadata = new ProductMetadata(_tmpVersion,_tmpCreatedAt,_tmpUpdatedAt,_tmpFirebase_uploaded);
+            _item = new Product(_tmpId,_tmpProduct_name,_tmpBrand,_tmpCategory,_tmpSubcategory,_tmpSize_value,_tmpSize_unit,_tmpPrice,_tmpSource,_tmpSource_url,_tmpIngredients,_tmpNutrition_data,_tmpImage_url,_tmpLast_updated,_tmpSearch_count,_tmpLlm_fallback_used,_tmpData_quality_score,_tmpMetadata);
             _result.add(_item);
           }
           return _result;

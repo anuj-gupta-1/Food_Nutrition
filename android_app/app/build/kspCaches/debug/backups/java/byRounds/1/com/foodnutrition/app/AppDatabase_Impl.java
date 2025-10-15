@@ -31,12 +31,12 @@ public final class AppDatabase_Impl extends AppDatabase {
   @Override
   @NonNull
   protected SupportSQLiteOpenHelper createOpenHelper(@NonNull final DatabaseConfiguration config) {
-    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(1) {
+    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(2) {
       @Override
       public void createAllTables(@NonNull final SupportSQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS `products` (`id` TEXT NOT NULL, `productName` TEXT, `brand` TEXT, `category` TEXT, `ingredients` TEXT, `servingSize` TEXT, `nutritionPer` TEXT, `energyKcal100g` REAL, `fat100g` REAL, `saturatedFat100g` REAL, `carbs100g` REAL, `sugars100g` REAL, `protein100g` REAL, `salt100g` REAL, `fiber100g` REAL, `sodium100g` REAL, PRIMARY KEY(`id`))");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `products` (`id` TEXT NOT NULL, `product_name` TEXT NOT NULL, `brand` TEXT NOT NULL, `category` TEXT NOT NULL, `subcategory` TEXT, `size_value` REAL, `size_unit` TEXT, `price` REAL, `source` TEXT NOT NULL, `source_url` TEXT, `ingredients` TEXT, `image_url` TEXT, `last_updated` TEXT, `search_count` INTEGER NOT NULL, `llm_fallback_used` INTEGER NOT NULL, `data_quality_score` INTEGER NOT NULL, `available` INTEGER NOT NULL, `standardUnit` TEXT NOT NULL, `nutritionSource` TEXT NOT NULL, `lastChecked` INTEGER, `version` INTEGER NOT NULL, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL, `firebase_uploaded` INTEGER NOT NULL, PRIMARY KEY(`id`))");
         db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '94ac002926439ba297036e557ef3bdd4')");
+        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fdbcb1a0d4348be142617b2b2fc25563')");
       }
 
       @Override
@@ -85,23 +85,31 @@ public final class AppDatabase_Impl extends AppDatabase {
       @NonNull
       public RoomOpenHelper.ValidationResult onValidateSchema(
           @NonNull final SupportSQLiteDatabase db) {
-        final HashMap<String, TableInfo.Column> _columnsProducts = new HashMap<String, TableInfo.Column>(16);
+        final HashMap<String, TableInfo.Column> _columnsProducts = new HashMap<String, TableInfo.Column>(24);
         _columnsProducts.put("id", new TableInfo.Column("id", "TEXT", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsProducts.put("productName", new TableInfo.Column("productName", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsProducts.put("brand", new TableInfo.Column("brand", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsProducts.put("category", new TableInfo.Column("category", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsProducts.put("product_name", new TableInfo.Column("product_name", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsProducts.put("brand", new TableInfo.Column("brand", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsProducts.put("category", new TableInfo.Column("category", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsProducts.put("subcategory", new TableInfo.Column("subcategory", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsProducts.put("size_value", new TableInfo.Column("size_value", "REAL", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsProducts.put("size_unit", new TableInfo.Column("size_unit", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsProducts.put("price", new TableInfo.Column("price", "REAL", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsProducts.put("source", new TableInfo.Column("source", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsProducts.put("source_url", new TableInfo.Column("source_url", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsProducts.put("ingredients", new TableInfo.Column("ingredients", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsProducts.put("servingSize", new TableInfo.Column("servingSize", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsProducts.put("nutritionPer", new TableInfo.Column("nutritionPer", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsProducts.put("energyKcal100g", new TableInfo.Column("energyKcal100g", "REAL", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsProducts.put("fat100g", new TableInfo.Column("fat100g", "REAL", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsProducts.put("saturatedFat100g", new TableInfo.Column("saturatedFat100g", "REAL", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsProducts.put("carbs100g", new TableInfo.Column("carbs100g", "REAL", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsProducts.put("sugars100g", new TableInfo.Column("sugars100g", "REAL", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsProducts.put("protein100g", new TableInfo.Column("protein100g", "REAL", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsProducts.put("salt100g", new TableInfo.Column("salt100g", "REAL", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsProducts.put("fiber100g", new TableInfo.Column("fiber100g", "REAL", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
-        _columnsProducts.put("sodium100g", new TableInfo.Column("sodium100g", "REAL", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsProducts.put("image_url", new TableInfo.Column("image_url", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsProducts.put("last_updated", new TableInfo.Column("last_updated", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsProducts.put("search_count", new TableInfo.Column("search_count", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsProducts.put("llm_fallback_used", new TableInfo.Column("llm_fallback_used", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsProducts.put("data_quality_score", new TableInfo.Column("data_quality_score", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsProducts.put("available", new TableInfo.Column("available", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsProducts.put("standardUnit", new TableInfo.Column("standardUnit", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsProducts.put("nutritionSource", new TableInfo.Column("nutritionSource", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsProducts.put("lastChecked", new TableInfo.Column("lastChecked", "INTEGER", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsProducts.put("version", new TableInfo.Column("version", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsProducts.put("createdAt", new TableInfo.Column("createdAt", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsProducts.put("updatedAt", new TableInfo.Column("updatedAt", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsProducts.put("firebase_uploaded", new TableInfo.Column("firebase_uploaded", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         final HashSet<TableInfo.ForeignKey> _foreignKeysProducts = new HashSet<TableInfo.ForeignKey>(0);
         final HashSet<TableInfo.Index> _indicesProducts = new HashSet<TableInfo.Index>(0);
         final TableInfo _infoProducts = new TableInfo("products", _columnsProducts, _foreignKeysProducts, _indicesProducts);
@@ -113,7 +121,7 @@ public final class AppDatabase_Impl extends AppDatabase {
         }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "94ac002926439ba297036e557ef3bdd4", "78d23254b9cb335e2f0ff43a310f291f");
+    }, "fdbcb1a0d4348be142617b2b2fc25563", "154b68f7beee6405943e119b3f29e312");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(config.context).name(config.name).callback(_openCallback).build();
     final SupportSQLiteOpenHelper _helper = config.sqliteOpenHelperFactory.create(_sqliteConfig);
     return _helper;

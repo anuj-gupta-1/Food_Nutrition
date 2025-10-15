@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.foodnutrition.app-mergeDebugResources-54:/values-v16/values-v16.xml",
+            "outputFile": "com.foodnutrition.app-mergeDebugResources-64:/values-v16/values-v16.xml",
             "map": [
                 {
-                    "source": "C:\\Gradle\\caches\\transforms-3\\84b24fecff7b7ec15a778267807a743c\\transformed\\core-1.12.0\\res\\values-v16\\values-v16.xml",
+                    "source": "C:\\Gradle\\caches\\transforms-3\\6f7d9167ad5e6f291325bda07fe35419\\transformed\\core-1.12.0\\res\\values-v16\\values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

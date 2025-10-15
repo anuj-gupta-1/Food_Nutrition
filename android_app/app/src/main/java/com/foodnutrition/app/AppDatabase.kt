@@ -5,7 +5,12 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Product::class], version = 1, exportSchema = false)
+import androidx.room.TypeConverters 
+import com.foodnutrition.app.data.Converters 
+
+@Database(entities = [Product::class], version = 2, exportSchema = false)
+@TypeConverters(Converters::class) // <-- ADD THIS ANNOTATION
+
 abstract class AppDatabase : RoomDatabase() {
     abstract fun productDao(): ProductDao
 
@@ -19,7 +24,9 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "food_nutrition_database"
-                ).build()
+                )
+                .fallbackToDestructiveMigration() // For development - clears DB on schema change
+                .build()
                 INSTANCE = instance
                 instance
             }
