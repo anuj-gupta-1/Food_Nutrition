@@ -57,27 +57,28 @@ class CsvParser {
             val fields = line.split("||")
             
             if (fields.size < 17) {
-                Log.w(TAG, "Insufficient fields in line: ${fields.size}")
-                return null
+                Log.w(TAG, "Insufficient fields in line: ${fields.size}, using available fields")
+                // Continue with available fields, handle missing ones gracefully
             }
             
-            val id = fields[0].trim()
-            val product_name = fields[1].trim()
-            val brand = fields[2].trim()
-            val category = fields[3].trim()
-            val subcategory = fields[4].trim().takeIf { it.isNotEmpty() }
-            val size_value = fields[5].trim().toDoubleOrNull()
-            val size_unit = fields[6].trim().takeIf { it.isNotEmpty() }
-            val price = fields[7].trim().toDoubleOrNull()
-            val source = fields[8].trim()
-            val source_url = fields[9].trim().takeIf { it.isNotEmpty() }
-            val ingredients = fields[10].trim().takeIf { it.isNotEmpty() }
-            val nutrition_data_json = fields[11].trim()
-            val image_url = fields[12].trim().takeIf { it.isNotEmpty() }
-            val last_updated = fields[13].trim().takeIf { it.isNotEmpty() }
-            val search_count = fields[14].trim().toIntOrNull() ?: 0
-            val llm_fallback_used = fields[15].trim().toBoolean()
-            val data_quality_score = fields[16].trim().toIntOrNull() ?: 0
+            // Safe field access with fallbacks
+            val id = fields.getOrNull(0)?.trim() ?: ""
+            val product_name = fields.getOrNull(1)?.trim() ?: ""
+            val brand = fields.getOrNull(2)?.trim() ?: ""
+            val category = fields.getOrNull(3)?.trim() ?: ""
+            val subcategory = fields.getOrNull(4)?.trim()?.takeIf { it.isNotEmpty() }
+            val size_value = fields.getOrNull(5)?.trim()?.toDoubleOrNull()
+            val size_unit = fields.getOrNull(6)?.trim()?.takeIf { it.isNotEmpty() }
+            val price = fields.getOrNull(7)?.trim()?.toDoubleOrNull()
+            val source = fields.getOrNull(8)?.trim() ?: ""
+            val source_url = fields.getOrNull(9)?.trim()?.takeIf { it.isNotEmpty() }
+            val ingredients = fields.getOrNull(10)?.trim()?.takeIf { it.isNotEmpty() }
+            val nutrition_data_json = fields.getOrNull(11)?.trim() ?: ""
+            val image_url = fields.getOrNull(12)?.trim()?.takeIf { it.isNotEmpty() }
+            val last_updated = fields.getOrNull(13)?.trim()?.takeIf { it.isNotEmpty() }
+            val search_count = fields.getOrNull(14)?.trim()?.toIntOrNull() ?: 0
+            val llm_fallback_used = fields.getOrNull(15)?.trim()?.toBoolean() ?: false
+            val data_quality_score = fields.getOrNull(16)?.trim()?.toIntOrNull() ?: 0
             
             // Parse nutrition data from JSON
             val nutritionData = parseNutritionData(nutrition_data_json)

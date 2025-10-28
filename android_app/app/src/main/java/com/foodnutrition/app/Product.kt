@@ -31,7 +31,24 @@ data class NutritionData(
     val available: Boolean = false,
     val standardUnit: String = "per100g",
     val nutritionSource: String = "csv_upload",
-    val lastChecked: Long? = null
+    val lastChecked: Long? = null,
+    
+    // Actual nutrition values (from LLM or other sources)
+    val energy_kcal: Double? = null,
+    val fat_g: Double? = null,
+    val saturated_fat_g: Double? = null,
+    val carbs_g: Double? = null,
+    val sugars_g: Double? = null,
+    val protein_g: Double? = null,
+    val salt_g: Double? = null,
+    val fiber_g: Double? = null,
+    val sodium_mg: Double? = null,
+    
+    // LLM enhancement metadata
+    val confidence_score: Double? = null,
+    val response_time_ms: Long? = null,
+    val from_cache: Boolean = false,
+    val model_used: String? = null
 )
 
 data class NutritionValue(
