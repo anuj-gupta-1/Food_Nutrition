@@ -1,20 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+
 # Build artifacts
 android_app/app/build/
 android_app/build/
 android_app/.gradle/
 android_app/.idea/
 android_app/local.properties
+android_app/app/src/main/assets/products.csv.backup_*
 
 # Temporary files
 _TO_BE_DELETED/
-.vscode/
 *.log
 *.tmp
+check_*.py
 
-# Cache files
+# Cache & Database files
 llm_cache.db
 *.cache
+*.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
 
 # OS files
 .DS_Store
 Thumbs.db
+
+# Data backups (keep in repo but ignore excessive backups)
+# data/products_backup_*.csv
+
+# Environment variables
+.env
+.env.local
+
+# Firebase
+.firebase/
+firebase-debug.log

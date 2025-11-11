@@ -1,0 +1,20 @@
+# Food Nutrition Database - Python Dependencies
+
+# Core Data Processing
+pandas>=1.3.0
+pyyaml>=6.0
+
+# Web Framework & API
+flask>=2.0.0
+flask-cors>=3.0.0
+requests>=2.25.0
+
+# Firebase Integration
+firebase-admin>=6.0.0
+
+# LLM & AI Services
+# Note: For local LLM, install Ollama separately: https://ollama.ai/
+
+# Optional: For advanced data analysis
+# numpy>=1.21.0
+# matplotlib>=3.4.0

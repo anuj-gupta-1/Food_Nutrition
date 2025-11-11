@@ -217,31 +217,104 @@ class LLMNutritionService:
         return None
     
     def parse_nutrition_response(self, content: str, model_used: str) -> Optional[Dict]:
-        """Parse LLM response and extract nutrition JSON"""
+        """Parse field-value response format"""
         try:
-            # Try to find JSON in the response
             import re
-            json_match = re.search(r'\{[^}]*\}', content)
-            if json_match:
-                nutrition_data = json.loads(json_match.group())
-                confidence = nutrition_data.pop("confidence", 0.6)
+            
+            # Try field-value format first (new format)
+            field_pattern = r'(\w+):\s*(.+?)(?=\n\w+:|$)'
+            matches = re.findall(field_pattern, content, re.MULTILINE | re.DOTALL)
+            
+            if matches:
+                # Parse field-value pairs
+                response_data = {}
+                for field, value in matches:
+                    value = value.strip()
+                    # Convert numeric values
+                    if field.endswith('_per_100g') or field in ['confidence_score', 'servings_per_container']:
+                        try:
+                            if value.lower() == 'null':
+                                response_data[field] = None
+                            else:
+                                response_data[field] = float(value) if '.' in value else int(value)
+                        except:
+                            response_data[field] = None
+                    else:
+                        response_data[field] = value if value.lower() != 'null' else None
                 
-                # Validate and normalize fields
-                required_fields = ["energy_kcal", "fat_g", "saturated_fat_g", "carbs_g", 
-                                 "sugars_g", "protein_g", "salt_g", "fiber_g", "sodium_mg"]
+                # Extract metadata
+                confidence = response_data.pop("confidence_score", 0.7)
+                data_source = response_data.pop("data_source", f"LLM-{model_used}")
+                processing_notes = response_data.pop("processing_notes", "LLM enhanced")
+                ingredients_list = response_data.pop("ingredients_list", "")
+                serving_size = response_data.pop("serving_size", "")
+                servings_per_container = response_data.pop("servings_per_container", None)
                 
-                for field in required_fields:
-                    if field not in nutrition_data:
+                # Remaining fields are nutrition data
+                nutrition_data = response_data
+                
+            else:
+                # Fallback to JSON format
+                json_match = re.search(r'\{.*\}', content, re.DOTALL)
+                if json_match:
+                    response_data = json.loads(json_match.group())
+                    
+                    # Extract based on format
+                    if "energy_kcal_per_100g" in response_data:
+                        confidence = response_data.pop("confidence_score", 0.7)
+                        data_source = response_data.pop("data_source", f"LLM-{model_used}")
+                        processing_notes = response_data.pop("processing_notes", "LLM enhanced")
+                        ingredients_list = response_data.pop("ingredients_list", "")
+                        serving_size = response_data.pop("serving_size", "")
+                        servings_per_container = response_data.pop("servings_per_container", None)
+                        nutrition_data = response_data
+                    else:
+                        # Legacy format
+                        nutrition_data = response_data.copy()
+                        confidence = nutrition_data.pop("confidence", 0.6)
+                        ingredients_list = ""
+                        serving_size = ""
+                        servings_per_container = None
+                        data_source = f"LLM-{model_used}"
+                        processing_notes = "LLM enhanced"
+                else:
+                    return None
+            
+            # Validate required fields
+            required_fields = [
+                "energy_kcal_per_100g", "carbs_g_per_100g", "total_sugars_g_per_100g",
+                "protein_g_per_100g", "fat_g_per_100g", "saturated_fat_g_per_100g", 
+                "fiber_g_per_100g", "sodium_mg_per_100g", "salt_g_per_100g"
+            ]
+            
+            for field in required_fields:
+                if field not in nutrition_data:
+                    # Try legacy field mapping
+                    legacy_field = field.replace("_per_100g", "")
+                    if legacy_field == "total_sugars_g":
+                        legacy_field = "sugars_g"
+                    
+                    if legacy_field in nutrition_data:
+                        nutrition_data[field] = nutrition_data[legacy_field]
+                    else:
                         nutrition_data[field] = None
-                
-                return {
-                    "nutrition_data": nutrition_data,
-                    "confidence_score": confidence,
-                    "model_used": model_used,
-                    "from_cache": False
-                }
+            
+            return {
+                "nutrition_data": nutrition_data,
+                "confidence_score": confidence,
+                "model_used": model_used,
+                "data_source": data_source,
+                "processing_notes": processing_notes,
+                "ingredients_list": ingredients_list,
+                "serving_size": serving_size,
+                "servings_per_container": servings_per_container,
+                "indian_market_specific": True,
+                "from_cache": False
+            }
+            
         except Exception as e:
             print(f"  -> Failed to parse response from {model_used}: {e}")
+            print(f"  -> Content: {content[:200]}...")
         return None
     
     def get_nutrition_from_llm(self, product_name: str, brand: str, category: str, 
@@ -250,13 +323,60 @@ class LLMNutritionService:
         
         size_info = f" ({size_value} {size_unit})" if size_value and size_unit else ""
         
-        # Optimized prompt for faster processing
-        prompt = f"""Product: {product_name}{size_info}, Brand: {brand}, Category: {category}
+        # Simplified field-based prompt for Indian nutrition data
+        prompt = f"""INDIAN FOOD NUTRITION DATA EXTRACTION
 
-Return nutrition per 100g as JSON:
-{{"energy_kcal": <number>, "fat_g": <number>, "carbs_g": <number>, "protein_g": <number>, "salt_g": <number>, "confidence": 0.7}}
+Product: {product_name}{size_info}
+Brand: {brand}
+Category: {category}
+Size: {size_value} {size_unit}
 
-Base on typical Indian {category} products. Use null for unknown values."""
+TASK: Extract nutrition data for database integration. Provide field-value pairs for our Indian food database.
+
+DATA SOURCES (priority order):
+1. Official brand websites (Nestle India, Britannia, Parle, ITC, etc.)
+2. FSSAI nutrition databases
+3. Indian Food Composition Tables (NIN-ICMR)  
+4. Verified Indian retailer nutrition labels
+5. Indian market standards for {category}
+
+REQUIRED FIELDS - Provide as field-value pairs:
+
+NUTRITION (per 100g/100ml):
+energy_kcal_per_100g: <number>
+carbs_g_per_100g: <number>
+total_sugars_g_per_100g: <number>
+protein_g_per_100g: <number>
+fat_g_per_100g: <number>
+saturated_fat_g_per_100g: <number>
+fiber_g_per_100g: <number>
+sodium_mg_per_100g: <number>
+salt_g_per_100g: <number>
+
+PRODUCT INFO:
+ingredients_list: ingredient1, ingredient2, ingredient3
+serving_size: 30g
+servings_per_container: 7
+
+QUALITY:
+confidence_score: 0.85
+data_source: Brand official website
+processing_notes: Verified from Indian nutrition label
+
+INDIAN MARKET FOCUS:
+- Use Indian formulations (not international variants)
+- Consider Indian ingredients (mustard oil, jaggery, Indian spices)
+- Apply Indian serving size standards
+- Ensure FSSAI compliance
+- Use "null" for uncertain values
+
+CONFIDENCE SCORING:
+0.9-1.0: Official brand/FSSAI data
+0.8-0.9: Government nutrition database  
+0.7-0.8: Verified retailer label
+0.6-0.7: Industry standard for Indian {category}
+
+Return ONLY the field-value pairs as shown above. No additional text."""
         
         # Try providers in order of speed (fastest first)
         providers_by_speed = ["groq", "ollama_local", "huggingface"]

@@ -88,6 +88,16 @@ def transform_row_to_document(row):
         'search_count': to_int(row.get('search_count')),
         'llm_fallback_used': to_bool(row.get('llm_fallback_used')),
         'data_quality_score': to_int(row.get('data_quality_score')),
+        # Individual nutrition columns for app compatibility
+        'energy_kcal_per_100g': to_float(row.get('energy_kcal_per_100g')),
+        'carbs_g_per_100g': to_float(row.get('carbs_g_per_100g')),
+        'protein_g_per_100g': to_float(row.get('protein_g_per_100g')),
+        'fat_g_per_100g': to_float(row.get('fat_g_per_100g')),
+        'total_sugars_g_per_100g': to_float(row.get('total_sugars_g_per_100g')),
+        'saturated_fat_g_per_100g': to_float(row.get('saturated_fat_g_per_100g')),
+        'fiber_g_per_100g': to_float(row.get('fiber_g_per_100g')),
+        'sodium_mg_per_100g': to_float(row.get('sodium_mg_per_100g')),
+        'salt_g_per_100g': to_float(row.get('salt_g_per_100g')),
         'metadata': {
             'version': 2,
             'createdAt': int(time.time() * 1000),

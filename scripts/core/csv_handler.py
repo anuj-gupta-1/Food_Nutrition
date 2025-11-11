@@ -104,20 +104,45 @@ def get_enhanced_products_count():
     except:
         return 0
 
-def get_beverage_stats():
-    """Get beverage category statistics"""
+def get_category_stats(category=None):
+    """Get statistics for all categories or a specific category"""
     try:
         df = load_products_csv()
-        beverages = df[df['category'] == 'beverage']
-        enhanced_beverages = beverages[beverages['llm_fallback_used'] == True]
         
-        return {
-            'total_beverages': len(beverages),
-            'enhanced_beverages': len(enhanced_beverages),
-            'enhancement_rate': len(enhanced_beverages) / len(beverages) * 100 if len(beverages) > 0 else 0
-        }
-    except:
-        return {'total_beverages': 0, 'enhanced_beverages': 0, 'enhancement_rate': 0}
+        if category:
+            # Single category stats
+            cat_products = df[df['category'] == category]
+            enhanced = cat_products[cat_products['llm_fallback_used'] == True]
+            
+            return {
+                f'total_{category}': len(cat_products),
+                f'enhanced_{category}': len(enhanced),
+                'enhancement_rate': len(enhanced) / len(cat_products) * 100 if len(cat_products) > 0 else 0
+            }
+        else:
+            # All categories stats
+            stats = {}
+            for cat in df['category'].unique():
+                if pd.isna(cat):
+                    continue
+                cat_products = df[df['category'] == cat]
+                enhanced = cat_products[cat_products['llm_fallback_used'] == True]
+                
+                stats[cat] = {
+                    'total': len(cat_products),
+                    'enhanced': len(enhanced),
+                    'enhancement_rate': len(enhanced) / len(cat_products) * 100 if len(cat_products) > 0 else 0
+                }
+            
+            return stats
+    except Exception as e:
+        print(f"Error getting category stats: {e}")
+        return {} if not category else {'total': 0, 'enhanced': 0, 'enhancement_rate': 0}
+
+# Backward compatibility
+def get_beverage_stats():
+    """Legacy function - use get_category_stats('beverage') instead"""
+    return get_category_stats('beverage')
 
 if __name__ == "__main__":
     # Test the CSV handler

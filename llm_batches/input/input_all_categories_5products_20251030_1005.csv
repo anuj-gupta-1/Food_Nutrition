@@ -1,0 +1,6 @@
+batch_id,original_product_id,product_name,brand,category,subcategory,size_value,size_unit,price,source
+1,jiomart_lotte_lotte_rich_cocoa_choco_pie_28_g_12_pcs,Lotte Rich Cocoa Choco Pie 28 g (12 pcs),Lotte,chocolate,chocolate,28.0,g,122.0,jiomart
+2,jiomart_daawat_daawat_pulav_basmati_rice_1_kg,Daawat Pulav Basmati Rice 1 kg,Daawat,essentials,rice,1.0,kg,135.0,jiomart
+3,jiomart_lila_dry_fruits_lila_dry_fruits_natural_premium_dry_fruits_mixcashew_almonds_figs_walnut_8_pcs_black,"LILA DRY FRUITS Natural Premium Dry Fruits Mix(Cashew, Almonds, Figs, Walnut 8 pcs, Black and Golden Raisins) 100g Jar Pack | Badam Giri, Kaju, Black & Golden Kishmish, Anjeer, Akhrot",Lila Dry Fruits,essentials,dry-fruits-nuts,8.0,pcs,139.0,jiomart
+4,jiomart_ahaar_ahaar_maize_daliya_500_gram_makki_dalia_corn_grit_polenta_corn_porridge_100_gluten_free,AHAAR Maize Daliya 500 Gram | Makki Dalia | Corn Grit | Polenta Corn Porridge | 100% Gluten Free,Ahaar,essentials,flour,500.0,g,160.0,jiomart
+5,jiomart_monbangla_monbangla_authentic_homemade_chalta_achardouble_pack_200gx2,MonBangla Authentic Homemade Chalta Achar-Double Pack (200GX2),Monbangla,flavourings,pickles-chutney,200.0,GX,299.0,jiomart

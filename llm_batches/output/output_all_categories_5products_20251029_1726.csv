@@ -1,0 +1,6 @@
+batch_id,original_product_id,product_name,brand,category,subcategory,size_value,size_unit,price,source
+1,jiomart_aeroplane_aeroplane_everyday_basmati_rice_5_kg,"Aeroplane Everyday Basmati Rice, 5 Kg",Aeroplane,essentials,rice,5.0,kg,696.0,jiomart
+2,jiomart_nakoda_nakoda_filtered_groundnut_oil_5_liter,NAKODA FILTERED Groundnut Oil 5 Liter,Nakoda,essentials,oil,5.0,L,899.0,jiomart
+3,jiomart_double_horse_double_horse_easy_palappam_mix_500g_velleppam_mix_export_quality,"Double Horse Easy Palappam Mix, 500g| Velleppam Mix| Export Quality",Double Horse,essentials,flour,500.0,g,69.0,jiomart
+4,jiomart_food_library_the_magic_of_nature_food_library_the_magic_of_naturenescafe_original_decaffeinated_coff,"Food Library The Magic of NatureNescafe Original Decaffeinated Coffee Sticks 1.8G, Box Of 200 Sachets, 360 G",Food Library The Magic Of Nature,beverage,tea-cofee,1.8,g,3250.0,jiomart
+5,jiomart_a_mangals_a_mangals_ready_mix_coffee_instant_premix_of_coffee_sugar_milk_pack_of_10,A. Mangals Ready Mix coffee | Instant premix of Coffee + Sugar + Milk | pack of 10,A. Mangals,beverage,tea-cofee,,Mangals,199.0,jiomart

@@ -1,0 +1,212 @@
+# Product Category and Subcategory Mapping Configuration
+# Version: 2.0
+# Last Updated: 2025-11-07
+
+metadata:
+  version: "2.0"
+  description: "Product category and subcategory mapping for Indian food products"
+  last_updated: "2025-11-07"
+  total_categories: 13
+
+categories:
+  essentials:
+    description: "Basic food essentials and staples"
+    subcategories:
+      - flour
+      - salt
+      - sugar
+      - dry-fruits-nuts
+      - oil
+      - rice
+      - pulses
+      - masala
+      - wheat-soya
+
+  snacks:
+    description: "Snack foods and light meals"
+    subcategories:
+      - breakfast
+      - chips
+      - namkeen
+      - biscuit
+      - bakery
+
+  flavourings:
+    description: "Flavor enhancers and condiments"
+    subcategories:
+      - pickles
+      - chutney
+      - sauce
+
+  beverage:
+    description: "All types of beverages"
+    subcategories:
+      - tea
+      - coffee
+      - juice
+      - carbonated
+      - energy-drinks
+      - health-drinks
+      - syrup
+      - other-beverages
+
+  spread:
+    description: "Spreadable foods and condiments"
+    subcategories:
+      - sauce-ketchup
+      - butter
+      - jam-honey
+      - other-spreads
+
+  noodles_pasta:
+    description: "Noodles and pasta products"
+    subcategories:
+      - noodles
+      - pasta
+      - instant-noodles
+      - noodles-pasta
+
+  sweets:
+    description: "Sweet foods and desserts"
+    subcategories:
+      - chocolate
+      - candy
+      - sweets
+      - mithai
+      - desserts
+
+  ready_to_eat:
+    description: "Ready-to-eat meals and convenience foods"
+    subcategories:
+      - ready-to-eat
+      - instant-meals
+
+  baby:
+    description: "Baby and infant food products"
+    subcategories:
+      - baby-food
+      - baby-snacks
+      - baby
+
+  dairy:
+    description: "Dairy products (excluding butter)"
+    subcategories:
+      - milk
+      - curd
+      - cheese
+      - paneer
+      - yogurt
+      - ghee
+      - general
+      - cheese-paneer
+
+  bakery:
+    description: "Baked goods and baking accessories"
+    subcategories:
+      - cake
+      - bread
+      - pastry
+      - cookies
+      - baking-accessories
+
+  frozen:
+    description: "Frozen food products"
+    subcategories:
+      - ice-cream
+      - kulfi
+      - frozen-foods
+
+  health:
+    description: "Health and wellness products"
+    subcategories:
+      - supplements
+      - protein-powder
+      - vitamins
+
+# Migration rules for updating existing data
+migration_rules:
+  # Format: old_category.old_subcategory -> new_category.new_subcategory
+  category_changes:
+    - from: "chocolate.chocolate"
+      to: "mithai.chocolate"
+    - from: "chocolate.candy"
+      to: "mithai.candy"
+    - from: "spread.sauce-ketchup-butter"
+      to: "spread.sauce-ketchup"
+
+  subcategory_splits:
+    # Split combined subcategories
+    - category: "essentials"
+      old_subcategory: "salt-sugar"
+      new_subcategories:
+        - salt
+        - sugar
+      classification_rules:
+        - keywords: ["salt", "namak", "sea salt", "rock salt"]
+          target: "salt"
+        - keywords: ["sugar", "cheeni", "jaggery", "gur"]
+          target: "sugar"
+
+    - category: "snacks"
+      old_subcategory: "chips-namkeen"
+      new_subcategories:
+        - chips
+        - namkeen
+      classification_rules:
+        - keywords: ["chips", "wafers", "crisps", "lays"]
+          target: "chips"
+        - keywords: ["namkeen", "mixture", "sev", "bhujia"]
+          target: "namkeen"
+
+    - category: "flavourings"
+      old_subcategory: "pickles-chutney"
+      new_subcategories:
+        - pickles
+        - chutney
+      classification_rules:
+        - keywords: ["pickle", "achar", "achaar"]
+          target: "pickles"
+        - keywords: ["chutney"]
+          target: "chutney"
+
+    - category: "beverage"
+      old_subcategory: "tea-cofee"
+      new_subcategories:
+        - tea
+        - coffee
+      classification_rules:
+        - keywords: ["tea", "chai", "green tea", "black tea"]
+          target: "tea"
+        - keywords: ["coffee", "espresso", "cappuccino"]
+          target: "coffee"
+
+    - category: "beverage"
+      old_subcategory: "juice-drink"
+      new_subcategories:
+        - juice
+        - carbonated
+        - health-drinks
+        - other-beverages
+      classification_rules:
+        - keywords: ["juice", "ras", "orange juice", "apple juice"]
+          target: "juice"
+        - keywords: ["cola", "pepsi", "sprite", "soda", "carbonated"]
+          target: "carbonated"
+        - keywords: ["protein drink", "health drink", "boost"]
+          target: "health-drinks"
+
+# Validation rules
+validation:
+  required_fields: ["category", "subcategory"]
+  category_constraints:
+    max_subcategories_per_category: 15
+    min_subcategories_per_category: 1
+  
+  naming_conventions:
+    category_format: "lowercase_with_underscores"
+    subcategory_format: "lowercase_with_hyphens"
+    
+  quality_checks:
+    check_orphaned_subcategories: true
+    validate_migration_paths: true
+    ensure_backward_compatibility: true

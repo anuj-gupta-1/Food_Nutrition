@@ -1,0 +1,21 @@
+batch_id,original_product_id,product_name,brand,category,subcategory,size_value,size_unit,price,source
+1,jiomart_bikaji_bikaji_tana_tan_aloo_bhujia_200_g,Bikaji Tana Tan Aloo Bhujia 200 g,Bikaji,snacks,chips-namkeen,200.0,g,45.0,jiomart
+2,jiomart_sams_sams_tomato_ketchup_1kg_pure_thick_and_soya_sauce_700g_combo_natural_ingredients,"Sams Tomato Ketchup 1kg Pure & Thick and Soya Sauce 700g Combo, Natural Ingredients",Sams,spread,sauce-ketchup-butter,1.0,kg,230.0,jiomart
+3,jiomart_momsy_momsy_premium_quality_white_urad_dal_split_pulses_450gm,Momsy Premium Quality White Urad Dal| Split| Pulses (450gm),Momsy,essentials,pulses,450.0,g,177.0,jiomart
+4,jiomart_lokraj_lokraj_premium_lokwan_wheat_atta_1kg_pack_of_4,LokRaj Premium Lokwan wheat Atta 1kg (Pack of 4),Lokraj,essentials,flour,1.0,kg,444.0,jiomart
+5,jiomart_sambhojanam_sambhojanam_combo_of_vrat_aahar1550_gm_kuttu_atta900gm_singhara_atta450gm_sendha_namak20,"Sambhojanam Combo of Vrat Aahar-1550 gm| Kuttu Atta-900gm, Singhara Atta-450gm & Sendha Namak-200gm",Sambhojanam,essentials,flour,1550.0,g,425.0,jiomart
+6,jiomart_zerog_zerog_potato_starch,Zero-G Potato Starch,Zero-G,essentials,flour,,,381.0,jiomart
+7,jiomart_parle_parle_fab_bourbon_chocolate_sandwich_biscuits_450_g,Parle Fab! Bourbon Chocolate Sandwich Biscuits 450 g,Parle,snacks,biscuit,450.0,g,71.0,jiomart
+8,jiomart_octavius_octavius_kadak_assam_ctc_chai_175kg_strong_kadak_regular_black_assam_tea_1kg_pack_with_3_pa,"Octavius KADAK Assam CTC Chai 1.75kg | Strong Kadak Regular Black Assam Tea 1Kg Pack with 3 packs of 250gm | Assam & Dooars Tea Blended CTC Black Tea Powder, Chai Patti 1.75kg",Octavius,beverage,tea-cofee,1.75,kg,435.0,jiomart
+9,jiomart_yogabar_yogabar_oatmeal_1kg_no_added_sugar_weight_loss_breakfast_cereal_added_alphonso_mango_chia_se,"Yogabar Oatmeal 1kg | No Added Sugar | Weight loss Breakfast Cereal | Added Alphonso Mango, Chia Seeds, Real Fruits, Berries, Whole Grains & chia seeds | High in Iron & Fibre | 100%Vegan & No Preservatives",Yogabar,snacks,breakfast,1.0,kg,463.0,jiomart
+10,jiomart_dhampur_green_dhampur_green_organic_white_sugar_jar_800g_x_3_table_sugar_chini_shakkar_100_organic_q,"Dhampur Green Organic White Sugar (Jar) 800g X 3, Table Sugar/ Chini/ Shakkar| 100% Organic | Quick Dissolving | Chemical Free | Pesticides Free",Dhampur Green,essentials,salt-sugar,800.0,g,595.0,jiomart
+11,jiomart_lg_lg_compounded_hing_powder_100_g,LG Compounded Hing Powder 100 g,Lg,essentials,masala,100.0,g,180.0,jiomart
+12,jiomart_classic_harvest_classic_harvest_authentic_tibar_basmati_rice_with_rich_aroma_900g,Classic Harvest Authentic Tibar Basmati Rice ( with rich aroma ) 900g,Classic Harvest,essentials,rice,900.0,g,199.0,jiomart
+13,jiomart_farmbean_farmbean_jaggery_powder_900gms_nattu_sakkarai_gur_powder_gud_powder,Farmbean Jaggery Powder 900Gms | Nattu Sakkarai | Gur Powder | Gud Powder,Farmbean,essentials,salt-sugar,900.0,g,449.0,jiomart
+14,jiomart_lijjat_lijjat_pepper_udad_papad_1_kg,Lijjat Pepper Udad Papad 1 kg,Lijjat,ready_to_eat,ready-to-eat,1.0,kg,347.0,jiomart
+15,jiomart_vistevia_vistevia_sugar_free_pineapple_jam_diabetic_and_keto_friendly_sweetened_naturally_with_stevi,"Vistevia Sugar Free Pineapple Jam, Diabetic and Keto Friendly - Sweetened Naturally with Stevia, More Than 60% Pineapple Content - Tastes Delicious - Pack of 1 (220GM)",Vistevia,spread,sauce-ketchup-butter,220.0,g,285.0,jiomart
+16,jiomart_imported_imported_monster_energy_mango_loco_juiced_energy_drink_energy_drink_500_ml_mango_flavour_im,Imported - Monster Energy Mango Loco Juiced Energy Drink Energy Drink 500 ml (Mango Flavour) - Imported from USA,Imported,beverage,juice-drink,500.0,ml,340.0,jiomart
+17,jiomart_green_piece_green_piece_black_olives_230gm_and_green_olives_230gm,Green Piece Black Olives (230gm) and Green Olives (230gm),Green Piece,ready_to_eat,ready-to-eat,230.0,g,359.0,jiomart
+18,jiomart_kotharis_royal_organic_foods_kotharis_royal_organic_palm_sugar_200gm,Kothari's Royal Organic Palm Sugar 200gm,Kothari’S Royal Organic Foods,essentials,salt-sugar,200.0,g,175.0,jiomart
+19,jiomart_good_life_good_life_broken_cashews_100_g,Good Life Broken Cashews 100 g,Good Life,essentials,dry-fruits-nuts,100.0,g,115.0,jiomart
+20,jiomart_trinetra_trinetra_soya_chunks_250_g,Trinetra Soya Chunks 250 g,Trinetra,essentials,wheat-soya,250.0,g,145.0,jiomart
