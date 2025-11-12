@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Nutrition Database API</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .endpoint { background: #f5f5f5; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .method { color: #007bff; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Food Nutrition Database API</h1>
+    <p>Welcome to the Food Nutrition Database API. This service provides access to nutritional information for various food products.</p>
+    
+    <h2>Available Endpoints</h2>
+    
+    <div class="endpoint">
+        <h3><span class="method">GET</span> /products.csv</h3>
+        <p>Download the complete product database in CSV format.</p>
+        <p><strong>Usage:</strong> <code>https://food-nutririon.web.app/products.csv</code></p>
+        <p><strong>Content-Type:</strong> text/csv</p>
+    </div>
+    
+    <h2>Database Information</h2>
+    <ul>
+        <li><strong>Total Products:</strong> 11,302+</li>
+        <li><strong>Categories:</strong> Dairy, Snacks, Beverages, and more</li>
+        <li><strong>Data Sources:</strong> StarQuik, JioMart, and other retailers</li>
+        <li><strong>Last Updated:</strong> October 2025</li>
+    </ul>
+    
+    <h2>CSV Format</h2>
+    <p>The CSV file contains the following columns:</p>
+    <ul>
+        <li>id, product_name, brand, category, subcategory</li>
+        <li>size_value, size_unit, price, source, source_url</li>
+        <li>ingredients, nutrition_data, image_url</li>
+        <li>energy_kcal_per_100g, carbs_g_per_100g, protein_g_per_100g, fat_g_per_100g</li>
+        <li>last_updated, search_count, data_quality_score</li>
+    </ul>
+    
+    <footer style="margin-top: 50px; text-align: center; color: #666;">
+        <p>Food Nutrition Database v4.0 | Powered by Firebase Hosting</p>
+    </footer>
+</body>
+</html>
